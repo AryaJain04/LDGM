@@ -1,4 +1,4 @@
-# Latent Differential Graphical Model (LDGM)
+# Identifying gene regulatory network rewiring using Latent Differential Graphical Models (LDGM)
 
 ## Brief Description
 LDGM is a novel approach for estimating tissue-specific gene regulatory networks directly, without the need to infer networks for individual tissues. It focuses on capturing network rewiring between different tissue types, offering efficiency and reliability advantages, particularly with smaller sample sizes.
