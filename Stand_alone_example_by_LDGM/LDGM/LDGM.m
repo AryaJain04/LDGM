@@ -38,3 +38,11 @@ Gene_name = cellstr(Gene_name);
 edgelist_gene = num2cell(edgelist);
 mask = ismember(edgelist, Gene_id);
 edgelist_gene(mask) = Gene_name(edgelist(mask))
+
+% Create a graph object
+G = graph(edgelist_gene(:,1), edgelist_gene(:,2));
+
+% Plot the graph
+figure;
+plot(G, 'NodeLabel', G.Nodes.Name, 'Layout', 'force', 'MarkerSize', 5);
+title('Gene Regulatory Network');
