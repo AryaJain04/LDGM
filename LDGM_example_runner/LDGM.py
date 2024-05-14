@@ -7,6 +7,7 @@
 import numpy as np
 import pandas as pd
 from scipy.stats import shapiro
+import random
 
 # Soft-threshold function
 def softThreshold(w, t, lam):
@@ -103,18 +104,19 @@ def differential_graph(Sigma1, Sigma2, lambda_, genes):
 
     return Theta, edge_list
 
- 
-
 # Load reference data
 cd8_exhausted_data = pd.read_csv('C:/Users/ajain/Downloads/LDGM_toy_example/Data/out_CD8_exhausted.tsv', delimiter='\t')
 macrophages_data = pd.read_csv('C:/Users/ajain/Downloads/LDGM_toy_example/Data/out_Macrophages.tsv', delimiter='\t')
 
 # Extract gene names
-genes = cd8_exhausted_data['Gene']
+genes = list(cd8_exhausted_data['Gene'])
 
-# Remove gene column
-cd8_exhausted_matrix = cd8_exhausted_data.drop(columns=['Gene']).to_numpy()
-macrophages_matrix = macrophages_data.drop(columns=['Gene']).to_numpy()
+# Randomly select n no. of genes , here we are considering 25 genes to view it properly.
+selected_genes = random.sample(genes, 25)
+
+# Filter data for selected genes
+cd8_exhausted_matrix = cd8_exhausted_data.loc[cd8_exhausted_data['Gene'].isin(selected_genes)].drop(columns=['Gene']).to_numpy()
+macrophages_matrix = macrophages_data.loc[macrophages_data['Gene'].isin(selected_genes)].drop(columns=['Gene']).to_numpy()
 
 # Perform Shapiro-Wilk Test
 _, p_ad_cd8 = shapiro(cd8_exhausted_matrix.flatten())
@@ -137,19 +139,19 @@ print('Correlation Matrix for Macrophages Tissue:')
 print(correlation_macrophages)
 
 # Save correlation matrices to files
-np.savetxt('C:/Users/ajain/Downloads/LDGM_toy_example/Data/Sigma1.txt', correlation_cd8, delimiter='\t')
-np.savetxt('C:/Users/ajain/Downloads/LDGM_toy_example/Data/Sigma2.txt', correlation_macrophages, delimiter='\t')
+np.savetxt('C:/Users/ajain/Downloads/LDGM_toy_example/Data/Sigma_1.txt', correlation_cd8, delimiter='\t')
+np.savetxt('C:/Users/ajain/Downloads/LDGM_toy_example/Data/Sigma_2.txt', correlation_macrophages, delimiter='\t')
 
 # Load correlation matrices Sigma1 and Sigma2
-Sigma1 = np.loadtxt('C:/Users/ajain/Downloads/LDGM_toy_example/Data/Sigma1.txt', delimiter='\t')
-Sigma2 = np.loadtxt('C:/Users/ajain/Downloads/LDGM_toy_example/Data/Sigma2.txt', delimiter='\t')
+Sigma1 = np.loadtxt('C:/Users/ajain/Downloads/LDGM_toy_example/Data/Sigma_1.txt', delimiter='\t')
+Sigma2 = np.loadtxt('C:/Users/ajain/Downloads/LDGM_toy_example/Data/Sigma_2.txt', delimiter='\t')
 
 # Compute differential graph
 lambda_ = 0.26924
-Theta, edge_list = differential_graph(Sigma1, Sigma2, lambda_, genes)
+Theta, edge_list = differential_graph(Sigma1, Sigma2, lambda_, selected_genes)
 
 # Write edge list to file with additional information
-with open('C:/Users/ajain/Downloads/LDGM_toy_example/Data/diff_network.tsv', 'w') as file:
+with open('C:/Users/ajain/Downloads/LDGM_toy_example/Data/network.tsv', 'w') as file:
     file.write("Target\tRegulator\tCondition\tedge-type\n")
     for edge in edge_list:
         file.write(f'{edge[0]}\t{edge[1]}\tDifferential\tUndirected\n')
@@ -159,39 +161,23 @@ print("Edge List:")
 print("Target\tRegulator\tCondition\tedge-type")
 for edge in edge_list:
     print(f"{edge[0]}\t{edge[1]}\tDifferential\tUndirected")
-
-
-
-# In[ ]:
-
-
-pip install networkx
-
-
-# In[2]:
-
-
 import networkx as nx
 import matplotlib.pyplot as plt
 
-# Read the edge list from the file
-edge_list_file = 'C:/Users/ajain/Downloads/LDGM_toy_example/Data/diff_network.tsv'
-
-# Create a directed graph
+# Create a graph
 G = nx.Graph()
 
-# Read edge list and add edges to the graph
-with open(edge_list_file, 'r') as file:
-    next(file)  # Skip header
-    for line in file:
-        target, regulator, condition, edge_type = line.strip().split('\t')
-        G.add_edge(target, regulator)
+# Add edges from edge_list
+for edge in edge_list:
+    G.add_edge(edge[0], edge[1])
 
-# Visualize the graph
-plt.figure(figsize=(12, 8))
-pos = nx.spring_layout(G)  # Positions of nodes
-nx.draw(G, pos, with_labels=True, node_size=5, node_color='skyblue', font_size=10, font_weight='bold', edge_color='gray', width=2)
-plt.title('Differential Network Visualization')
+# Draw the graph
+plt.figure(figsize=(10, 8))
+pos = nx.spring_layout(G)  # Positions for all nodes
+nx.draw_networkx_nodes(G, pos, node_size=200)
+nx.draw_networkx_edges(G, pos, width=1.0, alpha=0.5)
+nx.draw_networkx_labels(G, pos, font_size=10, font_family="sans-serif")
+plt.title("Differential Network Visualization")
 plt.show()
 
 
