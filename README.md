@@ -7,7 +7,8 @@ LDGM is a novel approach for estimating tissue-specific gene regulatory networks
 This is the link to the publication by Dechao Tian, Quanquan Gu, Jian Ma https://doi.org/10.1093/nar/gkw581
 
 ## Installation Instructions
-MATLAB 
+To run the code by author 'LDGM_reproduced ' use MATLAB Simuline Online. To run the other code, use Jupyter Notebook.  
+
 ## Execution Instructions
 To execute LDGM with example data, follow these steps:
 
@@ -18,7 +19,7 @@ To execute LDGM with example data, follow these steps:
 Replace `[input_file]` with the path to the input data file and `[output_file]` with the desired path for the output file.
 
 ## Relevant Parameters
-You might need to adjust the DGLoss function in code to shape the matrix and handle the large amount of data 
+You might need to adjust the DGLoss function, differential_graph, L1GeneralProjectedSubGradient in code to shape the matrix and handle the large amount of data. 
 
 ## Input File/Output File Format Specification
 The input data is in the .tsv and .txt format. Any input format can be used and code can modified accordingly.
