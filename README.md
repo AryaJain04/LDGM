@@ -27,10 +27,13 @@ The input data is in the .tsv and .txt format. Any input format can be used and 
 ## Explanation of Output
 The output file, named network.tsv, is a tab-separated file containing all edges row-wise, with the following columns:
 
-Target: Represents the target of the edge./
-Regulator: Denotes the source of the edge./
-Condition: Specifies the condition to which the edge belongs./
-Weight: Indicates the weight of the edge./
+Target: Represents the target of the edge.
+
+Regulator: Denotes the source of the edge.
+
+Condition: Specifies the condition to which the edge belongs.
+
+Weight: Indicates the weight of the edge.
 
 ## Other Necessary Information
 Please make sure to check if your data follows Gaussian Distribution and if 'yes' then create the correlation matrix using Pearson Correlation matrix and if 'no' then create the correlation matrix using Latent Correlation matrix. 
