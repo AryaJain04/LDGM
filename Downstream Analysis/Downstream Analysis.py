@@ -105,8 +105,8 @@ def differential_graph(Sigma1, Sigma2, lambda_, genes):
     return Theta, edge_list
 
 # Load reference data
-cd8_exhausted_data = pd.read_csv('C:/Users/ajain/Downloads/LDGM_toy_example/Data/out_CD8_exhausted.tsv', delimiter='\t')
-macrophages_data = pd.read_csv('C:/Users/ajain/Downloads/LDGM_toy_example/Data/out_Macrophages.tsv', delimiter='\t')
+cd8_exhausted_data = pd.read_csv('C:/Users/ajain/Downloads/LDGM/out_CD8_exhausted.tsv', delimiter='\t')
+macrophages_data = pd.read_csv('C:/Users/ajain/Downloads/LDGM/out_Macrophages.tsv', delimiter='\t')
 
 # Extract gene names
 genes = list(cd8_exhausted_data['Gene'])
@@ -139,19 +139,19 @@ print('Correlation Matrix for Macrophages Tissue:')
 print(correlation_macrophages)
 
 # Save correlation matrices to files
-np.savetxt('C:/Users/ajain/Downloads/LDGM_toy_example/Data/Sigma_1.txt', correlation_cd8, delimiter='\t')
-np.savetxt('C:/Users/ajain/Downloads/LDGM_toy_example/Data/Sigma_2.txt', correlation_macrophages, delimiter='\t')
+np.savetxt('C:/Users/ajain/Downloads/LDGM/Sigma_1.txt', correlation_cd8, delimiter='\t')
+np.savetxt('C:/Users/ajain/Downloads/LDGM/Sigma_2.txt', correlation_macrophages, delimiter='\t')
 
 # Load correlation matrices Sigma1 and Sigma2
-Sigma1 = np.loadtxt('C:/Users/ajain/Downloads/LDGM_toy_example/Data/Sigma_1.txt', delimiter='\t')
-Sigma2 = np.loadtxt('C:/Users/ajain/Downloads/LDGM_toy_example/Data/Sigma_2.txt', delimiter='\t')
+Sigma1 = np.loadtxt('C:/Users/ajain/Downloads/LDGM/Sigma_1.txt', delimiter='\t')
+Sigma2 = np.loadtxt('C:/Users/ajain/Downloads/LDGM/Sigma_2.txt', delimiter='\t')
 
 # Compute differential graph
 lambda_ = 0.26924
 Theta, edge_list = differential_graph(Sigma1, Sigma2, lambda_, selected_genes)
 
 # Write edge list to file with additional information
-with open('C:/Users/ajain/Downloads/LDGM_toy_example/Data/network.tsv', 'w') as file:
+with open('C:/Users/ajain/Downloads/LDGM/network.tsv', 'w') as file:
     file.write("Target\tRegulator\tCondition\tedge-type\n")
     for edge in edge_list:
         file.write(f'{edge[0]}\t{edge[1]}\tDifferential\tUndirected\n')
@@ -276,14 +276,14 @@ def enrichr_analysis(genes):
 enrichr_analysis(significant_genes)
 
 
-# In[3]:
+# In[8]:
 
 
 from sklearn.decomposition import PCA
 
 # Load reference data
-cd8_exhausted_data = pd.read_csv('C:/Users/ajain/Downloads/LDGM_toy_example/Data/out_CD8_exhausted.tsv', delimiter='\t')
-macrophages_data = pd.read_csv('C:/Users/ajain/Downloads/LDGM_toy_example/Data/out_Macrophages.tsv', delimiter='\t')
+cd8_exhausted_data = pd.read_csv('C:/Users/ajain/Downloads/LDGM/out_CD8_exhausted.tsv', delimiter='\t')
+macrophages_data = pd.read_csv('C:/Users/ajain/Downloads/LDGM/out_Macrophages.tsv', delimiter='\t')
 
 # Extract gene names
 genes = cd8_exhausted_data['Gene']
@@ -293,8 +293,8 @@ cd8_exhausted_matrix = cd8_exhausted_data.drop(columns=['Gene']).to_numpy()
 macrophages_matrix = macrophages_data.drop(columns=['Gene']).to_numpy()
 
 # Load correlation matrices Sigma1 and Sigma2
-Sigma1 = np.loadtxt('C:/Users/ajain/Downloads/LDGM_toy_example/Data/Sigma1.txt', delimiter='\t')
-Sigma2 = np.loadtxt('C:/Users/ajain/Downloads/LDGM_toy_example/Data/Sigma2.txt', delimiter='\t')
+Sigma1 = np.loadtxt('C:/Users/ajain/Downloads/LDGM/Sigma1.txt', delimiter='\t')
+Sigma2 = np.loadtxt('C:/Users/ajain/Downloads/LDGM/Sigma2.txt', delimiter='\t')
 
 # Perform PCA to reduce dimensionality
 pca_genes = PCA(n_components=2)
@@ -375,10 +375,4 @@ plt.ylabel('Principal Component 2')
 plt.legend()
 plt.grid(True)
 plt.show()
-
-
-# In[ ]:
-
-
-
 
